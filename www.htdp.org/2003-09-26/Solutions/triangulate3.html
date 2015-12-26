@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<title>Exercise 27.5.6; How to Design Programs </title>
+</head>
+<body>
+<a href="../Book/curriculum-Z-H-34.html#node_thm_27.5.6">Problem Statement</a>
+<pre>
+;; search : matrix -&gt; (union (listof num) #f)
+;; Purpose : produce first row in mat whose cofficient is not 0, #f otherwise
+;; Example: (search a-sw-mat) = (list 2 1)
+(define (search mat)
+  (cond
+    ((empty? mat) 
+     (error 'gauss "the system of equations has no proper triangular form"))
+    (else (cond
+	    ((= (first (first mat)) 0) (search (rest mat)))
+	    (else (first mat))))))
+</pre>
+</body>
+</html>

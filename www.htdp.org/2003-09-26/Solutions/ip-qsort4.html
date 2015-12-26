@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<title>Exercise 43.1.6; How to Design Programs </title>
+</head>
+<body>
+<a href="../Book/curriculum-Z-H-53.html#node_thm_43.1.6">Problem Statement</a>
+ | <a href="contents.html">Table of Contents</a>
+<pre>
+;; Language: Advanced Student
+
+;; [Vector Number] -&gt; [Vector Number]
+;; 3-averages for v
+
+(check-expect (ave3 (vector 1 2 3 2 1)) (vector 2 7/3 2))
+
+(define (ave3 v)
+ (build-vector (- (vector-length v) 2)
+               (lambda (i)
+                 (/ (+ (vector-ref v i) (vector-ref v (+ i 1)) (vector-ref v (+ i 2)))
+                    3))))
+
+;; [Vector Number] -&gt; Void
+;; effect: write the 3-averags of v back into v,
+;; for David: sets the leftmost and rightmost position to '-
+
+(define v (vector 1 2 3 2 1))
+
+(check-expect (begin (ave3! v) v) (vector '- 2 7/3 2 '-))
+
+(define (ave3! v)
+ (local ((define n (- (vector-length v) 1))
+
+         ;; [0,n) Number -&gt; Void
+         ;; effect: set v at i to the average of its immediate neighbors
+         ;; accu: pred is v at (vector-ref v (+ i 1))
+         (define (aux i pred)
+           (cond
+             [(= i 0) (vector-set! v i '-)]
+             [else (local ((define v@i (vector-ref v i)))
+                     (begin (vector-set! v i (/ (+ (vector-ref v (- i 1)) v@i pred) 3))
+                            (aux (- i 1) v@i)))]))
+         ;; Number
+         (define v@n (vector-ref v n)))
+   (begin
+     (vector-set! v n '-)
+     (aux (- n 1) v@n))))
+</pre>
+</body>
+</html>
